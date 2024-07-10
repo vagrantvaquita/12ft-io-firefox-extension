@@ -1,13 +1,30 @@
+function onCreated(tab) {
+    console.log(`Created new tab: ${tab.id}`);
+  }
+  
+  function onError(error) {
+    console.log(`Error: ${error}`);
+  }
+
 function handleInstalled(details) {
-    console.log(details.reason);
     browser.contextMenus.create(
         {
-          id: "12ft",
-          title: "Open on 12ft.io",
-          contexts: ["all"],
+            id: "12ft",
+            title: "Open on 12ft.io",
+            contexts: ["link"],
         }
-      );
-  }
+        );
+
+    browser.contextMenus.onClicked.addListener((info, tab) => {
+        console.log(info)
+        if (info.menuItemId === "12ft") {
+            creating = browser.tabs.create({
+            url: "https://12ft.io/" + info.linkUrl
+            });
+        }
+        creating.then(onCreated, onError);
+    });        
+}
   
 
 browser.runtime.onInstalled.addListener(handleInstalled)
