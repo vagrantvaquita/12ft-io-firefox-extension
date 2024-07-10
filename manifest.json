@@ -11,13 +11,6 @@
         "48": "icons/icon.svg",
         "96": "icons/icon.svg"
     },
-  
-    "content_scripts": [
-        {
-          "matches": ["*://*.mozilla.org/*"],
-          "js": ["12ft.js"]
-        }
-      ],
 
     "permissions": [
         "<all_urls>",
@@ -26,7 +19,7 @@
     ],
 
     "background": {
-        "scripts": ["background.js"],
+        "scripts": ["12ft.js"],
         "persistent": false,
         "type": "module"
     }
