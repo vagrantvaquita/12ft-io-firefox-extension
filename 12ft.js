@@ -1,29 +1,38 @@
-function onCreated(tab) {
-    console.log(`Created new tab: ${tab.id}`);
-  }
-  
-  function onError(error) {
-    console.log(`Error: ${error}`);
-  }
+createRootMenuItems();
 
-function handleInstalled(details) {
+browser.contextMenus.onClicked.addListener(async (info) => {
+    if (info.menuItemId === "12ft") {
+        browser.tabs.create({
+            url: "https://12ft.io/" + info.linkUrl
+        });
+    }
+});
+
+browser.contextMenus.onShown.addListener(async (info) => {
+    if (info.linkUrl.match(/12ft.io/g)) {
+        let updating = browser.contextMenus.update("12ft", {enabled: false});
+        updating.then(onUpdated, onError);
+    } else {
+        let updating = browser.contextMenus.update("12ft", {enabled: true});
+        updating.then(onUpdated, onError);
+    }
+    browser.contextMenus.refresh();
+});
+
+function createRootMenuItems() {
     browser.contextMenus.create(
         {
             id: "12ft",
             title: "Open on 12ft.io",
             contexts: ["link"],
         }
-        );
+    );
+}
 
-    browser.contextMenus.onClicked.addListener((info, tab) => {
-        if (info.menuItemId === "12ft") {
-            let creating = browser.tabs.create({
-            url: "https://12ft.io/" + info.linkUrl
-            });
-            creating.then(onCreated, onError);
-        }
-    });        
+function onUpdated() {
+    console.log("item updated successfully");
 }
   
-
-browser.runtime.onInstalled.addListener(handleInstalled)
+  function onError() {
+    console.log("error updating item:", browser.runtime.lastError);
+}
