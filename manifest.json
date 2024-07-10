@@ -21,7 +21,8 @@
 
     "permissions": [
         "<all_urls>",
-        "contextMenus"
+        "contextMenus",
+        "tabs"
     ],
 
     "background": {
